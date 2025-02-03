@@ -69,9 +69,9 @@ class SerialDataPlotter(QtWidgets.QMainWindow):
         right_splitter.addWidget(radio_widget)
 
         self.algorithms = QtWidgets.QButtonGroup()
-        self.alg1 = QtWidgets.QRadioButton("Method 1")
-        self.alg2 = QtWidgets.QRadioButton("Method 2")
-        self.alg3 = QtWidgets.QRadioButton("Method 3")
+        self.alg1 = QtWidgets.QRadioButton("Raw Data")
+        self.alg2 = QtWidgets.QRadioButton("Low-pass Filter")
+        self.alg3 = QtWidgets.QRadioButton("Kalman Filter")
 
         self.alg1.setChecked(True)  # Default selection
 
@@ -174,7 +174,18 @@ class SerialDataPlotter(QtWidgets.QMainWindow):
     def calculate_rpy(self, ax, ay, az):
         """ Compute roll, pitch, yaw based on selected algorithm """
         if self.selected_algorithm == 1:
-            return np.arctan2(ay, az) * 180 / np.pi, np.arctan2(-ax, np.sqrt(ay**2 + az**2)) * 180 / np.pi, 0
+            roll = np.arctan2(ay, az) * 180 / np.pi
+            pitch = np.arctan2(-ax, np.sqrt(ay**2 + az**2)) * 180 / np.pi
+            yaw = 0 # cannot be calculated with accelerometer data only
+            return roll, pitch, yaw
+        
+        elif self.selected_algorithm == 2:
+            # Add low-pass filter algorithm
+            pass
+
+        elif self.selected_algorithm == 3:
+            # Add Kalman filter algorithm
+            pass
         # Add other algorithm options here
 
     def update_cube_orientation(self, roll, pitch):
